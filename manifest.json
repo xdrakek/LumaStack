@@ -1,0 +1,17 @@
+{
+"name": "LumaStack",
+"description": "Plataforma web para gestión de proyectos Git con notificaciones vía Telegram y scripts.",
+"tech_stack": ["rust", "vue3", "tailwind", "shadcn/vue", "postgres"],
+"roles": ["Usuario", "Administrador"],
+"entry_points": {
+},
+"docs": [
+"README.md",
+"architecture.md",
+"requirements.md",
+"user-stories.md",
+"roadmap.md",
+"project-structure.md"
+],
+"license": "MIT"
+}
