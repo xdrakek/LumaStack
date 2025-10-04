@@ -1,25 +1,71 @@
-# If you prefer the allow list template instead of the deny list, see community template:
-# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
-#
-# Binaries for programs and plugins
-*.exe
-*.exe~
+# ===================================
+# LumaStack .gitignore
+# ===================================
+
+# --- Node / Frontend ---
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.nuxt/
+frontend/.cache/
+frontend/.eslintcache
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Tests output
+coverage/
+*.lcov
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# --- Rust / Backend ---
+backend/target/
+backend/Cargo.lock
+**/*.rs.bk
+
+# Build artifacts
+*.rlib
+*.rmeta
 *.dll
 *.so
 *.dylib
+*.exe
+*.pdb
 
-# Test binary, built with `go test -c`
-*.test
-
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
-
-# Dependency directories (remove the comment below to include it)
-# vendor/
-
-# Go workspace file
-go.work
-go.work.sum
-
-# env file
+# --- Environment & Config ---
 .env
+.env.*
+!.env.example
+
+# --- Database ---
+database/*.db
+database/migrations/*.tmp
+database/seeds/*.tmp
+
+# --- Docker ---
+docker-compose.override.yml
+.docker/
+*.pid
+
+# --- Scripts / Generated ---
+scripts/*.log
+scripts/*.out
+scripts/*.tmp
+
+# --- Global Ignore ---
+*.bak
+*.tmp
+*.swp
