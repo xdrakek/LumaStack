@@ -1,0 +1,208 @@
+# .claudeignore
+# Files and directories that Claude Code should ignore
+
+# ===================================
+# Dependencies
+# ===================================
+
+# Node.js
+frontend/node_modules/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Rust
+backend/target/
+target/
+**/target/
+**/*.rs.bk
+Cargo.lock
+
+# ===================================
+# Build Output & Distribution
+# ===================================
+
+frontend/dist/
+frontend/.vite/
+frontend/.nuxt/
+frontend/.cache/
+dist/
+build/
+out/
+
+# Compiled binaries
+*.exe
+*.dll
+*.so
+*.dylib
+*.rlib
+*.rmeta
+*.pdb
+
+# ===================================
+# Environment & Secrets
+# ===================================
+
+.env
+.env.*
+!.env.example
+
+# Sensitive files
+*.key
+*.pem
+*.p12
+*.pfx
+credentials.json
+secrets.json
+
+# ===================================
+# Databases & Data
+# ===================================
+
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+*.sql.tmp
+database/seeds/*.tmp
+database/migrations/*.tmp
+
+# PostgreSQL dumps
+*.dump
+*.backup
+
+# ===================================
+# Logs
+# ===================================
+
+*.log
+logs/
+*.out
+scripts/*.log
+scripts/*.out
+
+# ===================================
+# Testing & Coverage
+# ===================================
+
+coverage/
+.nyc_output/
+*.lcov
+.coverage
+htmlcov/
+*.cover
+
+# Test artifacts
+test-results/
+playwright-report/
+screenshots/
+
+# ===================================
+# IDE & Editor
+# ===================================
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# JetBrains
+*.iml
+.idea/*
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# ===================================
+# Version Control
+# ===================================
+
+.git/
+.gitignore
+.gitattributes
+
+# ===================================
+# Package Manager Locks
+# ===================================
+
+# We want to ignore locks as they're auto-generated
+# and can be very large, but keep them in git
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+Cargo.lock
+
+# ===================================
+# Cache & Temp Files
+# ===================================
+
+.cache/
+.temp/
+.tmp/
+tmp/
+temp/
+
+# OS cache
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===================================
+# Docker
+# ===================================
+
+.docker/
+*.pid
+
+# ===================================
+# Generated Files
+# ===================================
+
+# Rust generated
+sqlx-data.json
+
+# Frontend generated
+frontend/.eslintcache
+frontend/vite.config.ts.timestamp-*
+
+# Auto-generated docs (if using tools)
+docs/api/generated/
+
+# ===================================
+# Media & Assets (optional)
+# ===================================
+
+# Uncomment if you have large media files
+# *.mp4
+# *.mov
+# *.avi
+# *.mkv
+# *.webm
+
+# Large images (keep small ones for context)
+# *.psd
+# *.ai
+
+# ===================================
+# Project Specific
+# ===================================
+
+# Ignore large documentation that Claude doesn't need
+# CHANGELOG.md  # Uncomment if very large
+
+# Backup files
+*.bak
+*.backup
+*.old
