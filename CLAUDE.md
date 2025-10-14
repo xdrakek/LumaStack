@@ -11,7 +11,7 @@ LumaStack is a modern web platform for monitoring and managing Git repositories 
 ## Technology Stack
 
 **Frontend**:
-- Vue.js 3 with Composition API (using `<script setup>`)
+- Vue.js 3 with Composition API (using `<script setup>`) and TypeScript
 - Tailwind CSS for styling
 - shadcn/vue for UI components
 - Pinia for state management
@@ -135,6 +135,10 @@ Foreign keys enforce referential integrity. All timestamps use PostgreSQL TIMEST
 
 - **Language**: Documentation is primarily in Spanish; code should follow English conventions for variables/functions
 - **Testing**: Target > 80% code coverage for both frontend and backend
-- **Code Style**: Vue components use Composition API with `<script setup>`, Rust follows idiomatic patterns
+- **Code Style**:
+  - Vue components use Composition API with `<script setup lang="ts">`
+  - TypeScript strict mode enabled for type safety
+  - Type-safe API clients and WebSocket message contracts
+  - Rust follows idiomatic patterns
 - **Real-time Updates**: Use WebSockets for live commit notifications and script execution status
 - **Telegram Integration**: Respect Telegram API rate limits; implement retry with backoff
