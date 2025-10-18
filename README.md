@@ -55,7 +55,7 @@ LumaStack es una solución completa que permite visualizar proyectos Git, monito
 - **Vite** para desarrollo rápido y build optimizado
 
 **Backend** ⚙️
-- **Rust** con Axum/Actix-web para APIs ultra-rápidas
+- **Rust** con Axum para APIs ultra-rápidas
 - **PostgreSQL** como base de datos principal
 - **WebSockets** para comunicación en tiempo real
 

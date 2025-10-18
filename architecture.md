@@ -24,7 +24,7 @@ LumaStack es una plataforma web moderna diseñada para el monitoreo y gestión d
 - Vite como bundler
 
 **Backend**:
-- Rust con framework Axum/Actix-web
+- Rust con framework Axum
 - PostgreSQL como base de datos principal
 - JWT para autenticación
 - WebSockets para comunicación en tiempo real

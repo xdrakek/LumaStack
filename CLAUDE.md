@@ -18,7 +18,7 @@ LumaStack is a modern web platform for monitoring and managing Git repositories 
 - Vite as build tool
 
 **Backend**:
-- Rust with Axum or Actix-web framework
+- Rust with Axum framework
 - PostgreSQL 13+ as primary database
 - JWT for authentication
 - WebSockets for real-time communication
