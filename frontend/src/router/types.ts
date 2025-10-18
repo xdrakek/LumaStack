@@ -1,10 +1,8 @@
-import type { RouteMeta as VueRouteMeta } from 'vue-router'
-
 /**
  * Extensión de RouteMeta con propiedades personalizadas
  */
 declare module 'vue-router' {
-  interface RouteMeta extends VueRouteMeta {
+  interface RouteMeta {
     /** Requiere que el usuario esté autenticado */
     requiresAuth?: boolean
     /** Requiere que el usuario NO esté autenticado (solo invitados) */

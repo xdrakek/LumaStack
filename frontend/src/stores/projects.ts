@@ -34,6 +34,7 @@ export const useProjectsStore = defineStore('projects', () => {
   }
 
   async function fetchProjectById(id: number): Promise<void> {
+    console.log(id) //TODO: Remover
     loading.value = true
     error.value = null
 
@@ -49,6 +50,7 @@ export const useProjectsStore = defineStore('projects', () => {
   }
 
   async function fetchCommits(projectId: number, limit: number = 10): Promise<void> {
+    console.log(projectId, limit) //TODO: Remover
     loading.value = true
     error.value = null
 
@@ -64,6 +66,7 @@ export const useProjectsStore = defineStore('projects', () => {
   }
 
   async function toggleProjectLock(projectId: number): Promise<void> {
+    console.log(projectId) //TODO: Remover
     loading.value = true
     error.value = null
 

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+// import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const router = useRouter()
-const authStore = useAuthStore()
+// const authStore = useAuthStore()
 
 const loading = ref(true)
 const error = ref('')
@@ -20,13 +20,13 @@ onMounted(async () => {
     // Mock de autenticación exitosa
     await new Promise(resolve => setTimeout(resolve, 1000))
 
-    authStore.setAuth('telegram-token', {
-      id: 1,
-      username: 'telegram-user',
-      email: 'user@telegram.com',
-      role: 'user',
-      telegramUserId: '123456789'
-    })
+    // authStore.setAuth('telegram-token', {
+    //   id: 1,
+    //   username: 'telegram-user',
+    //   email: 'user@telegram.com',
+    //   role: 'user',
+    //   telegramUserId: '123456789'
+    // })
 
     router.push('/dashboard')
   } catch (err) {

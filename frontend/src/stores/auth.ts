@@ -16,6 +16,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   // Actions
   async function login(credentials: LoginCredentials): Promise<void> {
+    console.log(credentials) //TODO:Remover
     loading.value = true
     error.value = null
 
@@ -34,6 +35,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function loginWithTelegram(magicLink: string): Promise<void> {
+    console.log(magicLink) //TODO:Remover
     loading.value = true
     error.value = null
 
