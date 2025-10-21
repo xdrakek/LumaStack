@@ -19,7 +19,8 @@ LumaStack is a modern web platform for monitoring and managing Git repositories 
 
 **Backend**:
 - Rust with Axum framework
-- PostgreSQL 13+ as primary database
+- SQLx for database operations
+- PostgreSQL 18 as primary database
 - JWT for authentication
 - WebSockets for real-time communication
 

@@ -87,7 +87,7 @@ LumaStack es una plataforma web moderna diseñada para el monitoreo y gestión d
 └───────────────────┬─────────────────────────────────────┘
                     │ sqlx (async)
 ┌───────────────────▼─────────────────────────────────────┐
-│            PostgreSQL 13+                               │
+│            PostgreSQL 18                                │
 │  Tables:                                                │
 │  - users (id, username, email, password_hash, role)     │
 │  - projects (id, name, repository_path, description)    │

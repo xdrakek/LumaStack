@@ -1,10 +1,11 @@
 # LumaStack Backend
 
-Backend de LumaStack construido con Rust y Axum.
+Backend de LumaStack construido con Rust + Axum + PostgreSQL + SQLx.
 
 ## Requisitos
 
-- Rust 1.70+ (instalar desde [rustup.rs](https://rustup.rs/))
+- Rust 1.75+ (instalar desde [rustup.rs](https://rustup.rs/))
+- PostgreSQL 18 (instalado y corriendo)
 - Cargo (incluido con Rust)
 
 ## Estructura del Proyecto
@@ -27,10 +28,13 @@ backend/
 
 - **axum** - Framework web moderno y ergonómico
 - **tokio** - Runtime asíncrono
+- **sqlx** - Cliente PostgreSQL async con type-safety
 - **tower** - Ecosystem de middleware
 - **tower-http** - Middleware HTTP (CORS, tracing)
 - **serde** - Serialización/deserialización
 - **tracing** - Logging estructurado
+- **chrono** - Manejo de fechas y timestamps
+- **thiserror** - Manejo de errores personalizado
 
 ## Ejecutar el Proyecto
 
@@ -75,41 +79,86 @@ cargo fmt
 cargo clippy -- -D warnings
 ```
 
+## Configuración de PostgreSQL 18
+
+### Instalación con Docker (Recomendado)
+
+```bash
+docker run -d \
+  --name postgresql \
+  -p 5432:5432 \
+  -e POSTGRES_PASSWORD=password \
+  -e POSTGRES_USER=admin \
+  -v lumastack-db-data:/var/lib/postgresql/data \
+  postgres:18
+```
+
+### Crear base de datos
+
+```bash
+# Conectarse al contenedor
+docker exec -it postgresql psql -U admin
+
+# Crear usuario y base de datos
+CREATE USER lumastack WITH PASSWORD 'password';
+CREATE DATABASE lumastack OWNER lumastack;
+GRANT ALL PRIVILEGES ON DATABASE lumastack TO lumastack;
+\q
+```
+
 ## Variables de Entorno
 
-Crea un archivo `.env` en el directorio `backend/` con las siguientes variables:
+Crea un archivo `.env` en el directorio `backend/` (copia desde `.env.example`):
+
+```bash
+cp .env.example .env
+```
+
+Contenido del `.env`:
 
 ```env
 # Servidor
 PORT=3000
 HOST=0.0.0.0
+RUST_LOG=lumastack_backend=debug,tower_http=debug
 
-# Base de datos (configurar en fases posteriores)
-DATABASE_URL=postgresql://user:password@localhost/lumastack
+# Base de datos PostgreSQL 18
+DATABASE_URL=postgresql://lumastack:password@localhost/lumastack
 
-# JWT (configurar en fases posteriores)
-JWT_SECRET=your-secret-key-here
+# JWT
+JWT_SECRET=your-secret-key-here-change-in-production
 JWT_EXPIRATION=86400
 
-# Telegram (configurar en fases posteriores)
-TELEGRAM_BOT_TOKEN=your-telegram-bot-token
+# Telegram Bot
+TELEGRAM_BOT_TOKEN=your-telegram-bot-token-here
 ```
 
 ## Estado Actual
 
-Version: 0.1.0 (MVP en desarrollo)
+**Version:** 0.1.0 (MVP en desarrollo)
 
-**Implementado:**
-- Servidor HTTP básico con Axum
-- Estructura modular de carpetas
-- Sistema de logging con tracing
-- Ruta raíz de prueba
+### ✅ Implementado
 
-**Próximos pasos:**
-- Configurar conexión a PostgreSQL
-- Implementar handlers de autenticación
-- Crear modelos de datos
-- Agregar middleware de autenticación JWT
+- ✅ Servidor HTTP con Axum
+- ✅ Estructura modular (handlers, models, db, services)
+- ✅ Sistema de logging con tracing
+- ✅ **Integración completa con PostgreSQL 18 + SQLx**
+  - Pool de conexiones configurado
+  - Sistema de migraciones automáticas
+  - Modelo User con roles (user/admin)
+  - Queries CRUD type-safe para usuarios
+  - Manejo de errores personalizado
+- ✅ Endpoints operacionales:
+  - `GET /` - Información de la API
+  - `GET /health` - Health check con verificación de BD
+
+### 🔜 Próximos pasos
+
+- Implementar bcrypt para hash de passwords
+- Crear handlers de autenticación (register, login)
+- Implementar JWT authentication
+- Agregar endpoints REST para gestión de usuarios
+- Middleware de autenticación
 - Configurar CORS para frontend
 
 ## Recursos

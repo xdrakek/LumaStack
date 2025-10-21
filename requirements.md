@@ -314,8 +314,8 @@ LumaStack es un sistema web independiente que actúa como interfaz centralizada 
 
 ### 5.1 Tecnológicas
 - Frontend: Vue.js 3, Tailwind CSS
-- Backend: Rust, Axum
-- Base de datos: PostgreSQL 13+
+- Backend: Rust, Axum, SQLx
+- Base de datos: PostgreSQL 18
 
 
 ### 5.2 Regulatorias

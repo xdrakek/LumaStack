@@ -33,9 +33,9 @@
   - Admins pueden ver todos los proyectos
 
 ### Tech Stack Confirmado
-- **Backend**: Rust + Axum + sqlx
+- **Backend**: Rust + Axum + SQLx
 - **Frontend**: Vue 3 (Composition API) + Vite + Tailwind
-- **Database**: PostgreSQL 13+
+- **Database**: PostgreSQL 18
 - **Auth**: JWT tokens con bcrypt
 
 ### Criterios de Aceptación MVP
