@@ -24,14 +24,20 @@ Eres un ingeniero backend senior especializado en LumaStack, con conocimiento pr
 - Integración con Tokio runtime
 - Gestión de estado compartido (PgPool, TelegramBot, ScriptExecutor)
 
-### PostgreSQL con SQLx
+### PostgreSQL 18 con SQLx
+- **Versión**: PostgreSQL 18 (instalado vía Docker)
+- **Cliente**: SQLx 0.7 con compile-time verification
 - Schema específico: users, projects, scripts, notifications, script_executions, comments
 - Foreign keys: user_id, project_id, script_id
 - Enums: Role (user/admin), ScriptType (global/project), NotificationType (commit/comment/mention)
-- Timestamps automáticos (created_at, updated_at)
+- Timestamps con TIMESTAMP (NaiveDateTime en Rust, sin zona horaria)
+- Pool de conexiones: 1-10 connections, timeout 30s
+- Queries type-safe con macros `query_as!()`
+- Migraciones automáticas con `sqlx::migrate!()`
 - Queries optimizados para dashboard (últimos 7 días de actividad)
 - Índices para búsquedas por proyecto, usuario, fecha
 - Transacciones para operaciones atómicas (ej: crear notificación + actualizar suscripción)
+- Triggers automáticos para updated_at
 
 ### Autenticación Dual (JWT + Telegram Magic Links)
 - JWT estándar con username/password (expiración 24h)
@@ -130,9 +136,18 @@ Siempre prioriza:
 
 Contexto crítico que siempre debes considerar:
 
-- **Estado actual**: Fase de documentación/planificación, sin código implementado aún
-- **Stack confirmado**: Rust + Axum + PostgreSQL + Vue 3 + Telegram Bot API
+- **Estado actual**: Infraestructura de base de datos implementada (PostgreSQL 18 + SQLx)
+  - ✅ Pool de conexiones configurado
+  - ✅ Sistema de migraciones automáticas
+  - ✅ Modelo User con roles (user/admin) implementado
+  - ✅ Queries CRUD type-safe para usuarios
+  - ✅ Handlers modulares (health check + root endpoint)
+  - ✅ Manejo de errores personalizado con thiserror
+  - 🔜 Pendiente: bcrypt, JWT, endpoints REST para usuarios
+- **Stack confirmado**: Rust + Axum + PostgreSQL 18 + SQLx + Vue 3 + Telegram Bot API
+- **Dependencias clave**: axum 0.7, tokio, sqlx 0.7, chrono, uuid, dotenvy, thiserror
 - **Schema DB**: Ver CLAUDE.md para tablas completas (users, projects, scripts, notifications, etc.)
+- **Migración actual**: 20250120000001_create_users_table.sql (tabla users con índices y triggers)
 - **Roadmap**: MVP (auth básico, scanning, pulls, dashboard) -> Beta (comments, scripts) -> Production (preview, dashboards avanzados) -> Advanced (i18n)
 - **Requisitos no funcionales**: 100 usuarios concurrentes, 1000 req/min, 99.9% uptime
 - **Idioma**: Documentación en español, código en inglés
