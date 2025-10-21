@@ -5,22 +5,51 @@ use std::time::Duration;
 
 /// Crea y configura el pool de conexiones a PostgreSQL
 ///
-/// # Configuración
-/// - Min connections: 1
-/// - Max connections: 10
-/// - Acquire timeout: 30 segundos
-/// - Idle timeout: 10 minutos
+/// # Configuración (vía variables de entorno)
+/// - `DB_MIN_CONNECTIONS`: Conexiones mínimas (default: 1)
+/// - `DB_MAX_CONNECTIONS`: Conexiones máximas (default: 10)
+/// - `DB_ACQUIRE_TIMEOUT`: Timeout para adquirir conexión en segundos (default: 30)
+/// - `DB_IDLE_TIMEOUT`: Timeout de inactividad en segundos (default: 600)
 ///
 /// # Errors
 /// Retorna error si no se puede conectar a la base de datos
 pub async fn create_pool(database_url: &str) -> Result<PgPool, sqlx::Error> {
     tracing::info!("Conectando a la base de datos...");
 
+    // Leer configuración del pool desde variables de entorno con valores por defecto
+    let min_connections = std::env::var("DB_MIN_CONNECTIONS")
+        .ok()
+        .and_then(|s| s.parse::<u32>().ok())
+        .unwrap_or(1);
+
+    let max_connections = std::env::var("DB_MAX_CONNECTIONS")
+        .ok()
+        .and_then(|s| s.parse::<u32>().ok())
+        .unwrap_or(10);
+
+    let acquire_timeout_secs = std::env::var("DB_ACQUIRE_TIMEOUT")
+        .ok()
+        .and_then(|s| s.parse::<u64>().ok())
+        .unwrap_or(30);
+
+    let idle_timeout_secs = std::env::var("DB_IDLE_TIMEOUT")
+        .ok()
+        .and_then(|s| s.parse::<u64>().ok())
+        .unwrap_or(600);
+
+    tracing::info!(
+        "Configuración del pool: min={}, max={}, acquire_timeout={}s, idle_timeout={}s",
+        min_connections,
+        max_connections,
+        acquire_timeout_secs,
+        idle_timeout_secs
+    );
+
     let pool = PgPoolOptions::new()
-        .min_connections(1)
-        .max_connections(10)
-        .acquire_timeout(Duration::from_secs(30))
-        .idle_timeout(Duration::from_secs(600))
+        .min_connections(min_connections)
+        .max_connections(max_connections)
+        .acquire_timeout(Duration::from_secs(acquire_timeout_secs))
+        .idle_timeout(Duration::from_secs(idle_timeout_secs))
         .connect(database_url)
         .await?;
 

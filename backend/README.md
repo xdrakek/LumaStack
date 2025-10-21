@@ -125,6 +125,12 @@ RUST_LOG=lumastack_backend=debug,tower_http=debug
 # Base de datos PostgreSQL 18
 DATABASE_URL=postgresql://lumastack:password@localhost/lumastack
 
+# Configuración del pool de conexiones (opcional, con valores por defecto sensibles)
+# DB_MIN_CONNECTIONS=1           # Mínimo de conexiones (default: 1)
+# DB_MAX_CONNECTIONS=10          # Máximo de conexiones (default: 10, recomendado 20-50 para producción)
+# DB_ACQUIRE_TIMEOUT=30          # Timeout para adquirir conexión en segundos (default: 30)
+# DB_IDLE_TIMEOUT=600            # Timeout de inactividad en segundos (default: 600)
+
 # JWT
 JWT_SECRET=your-secret-key-here-change-in-production
 JWT_EXPIRATION=86400
@@ -132,6 +138,14 @@ JWT_EXPIRATION=86400
 # Telegram Bot
 TELEGRAM_BOT_TOKEN=your-telegram-bot-token-here
 ```
+
+### Recomendaciones para Producción
+
+**Pool de Conexiones:**
+- Para cargas moderadas (10-50 usuarios concurrentes): `DB_MAX_CONNECTIONS=20`
+- Para cargas altas (50-100 usuarios concurrentes): `DB_MAX_CONNECTIONS=50`
+- Para cargas muy altas (100+ usuarios): `DB_MAX_CONNECTIONS=100`
+- La regla general: `max_connections = (núcleos_cpu × 2) + número_de_discos`
 
 ## Estado Actual
 
