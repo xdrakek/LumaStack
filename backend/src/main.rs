@@ -1,12 +1,15 @@
 use axum::{routing::get, Router};
+use clap::Parser;
 use std::net::SocketAddr;
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+mod cli;
 mod db;
 mod handlers;
 mod models;
 
+use cli::{Cli, Commands};
 use handlers::{health_handler, root_handler, AppState};
 
 #[tokio::main]
@@ -23,6 +26,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Load environment variables
     dotenvy::dotenv().ok();
 
+    // Parse CLI arguments
+    let cli = Cli::parse();
+
     // Get database URL from environment
     let database_url = std::env::var("DATABASE_URL")?;
 
@@ -31,6 +37,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Run migrations
     db::run_migrations(&pool).await?;
+
+    // Handle CLI commands
+    match cli.command {
+        Some(Commands::CreateAdmin {
+            email,
+            username,
+            password,
+        }) => {
+            // Ejecutar comando create-admin
+            cli::commands::create_admin(&pool, email, username, password).await?;
+            return Ok(());
+        }
+        Some(Commands::Serve) | None => {
+            // Continuar con el servidor (default)
+        }
+    }
 
     // Create application state
     let state = AppState { db: pool };

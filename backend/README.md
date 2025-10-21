@@ -147,6 +147,65 @@ TELEGRAM_BOT_TOKEN=your-telegram-bot-token-here
 - Para cargas muy altas (100+ usuarios): `DB_MAX_CONNECTIONS=100`
 - La regla general: `max_connections = (núcleos_cpu × 2) + número_de_discos`
 
+## Comandos CLI
+
+El backend incluye comandos CLI para tareas administrativas.
+
+### Crear Usuario Administrador
+
+Crea un usuario con rol de administrador para acceder al sistema.
+
+**Modo Interactivo:**
+```bash
+cargo run -- create-admin
+```
+El comando solicitará email, username y password de forma interactiva.
+
+**Con Argumentos:**
+```bash
+cargo run -- create-admin \
+  --email admin@miempresa.com \
+  --username admin \
+  --password MiPasswordSeguro123
+```
+
+**Opciones disponibles:**
+- `-e, --email <EMAIL>` - Email del administrador
+- `-u, --username <USERNAME>` - Username del administrador
+- `-p, --password <PASSWORD>` - Password del administrador
+
+**Validaciones:**
+- Email debe contener '@'
+- Username debe tener al menos 3 caracteres
+- Password debe tener al menos 8 caracteres
+- No permite duplicar emails (verifica si el usuario ya existe)
+
+**Ejemplo de salida exitosa:**
+```
+🔧 Creando usuario administrador...
+
+🔐 Hasheando password...
+💾 Guardando usuario en base de datos...
+
+✅ Usuario administrador creado exitosamente!
+   ID: 1
+   Username: admin
+   Email: admin@miempresa.com
+   Role: Admin
+
+🎉 Ya puedes iniciar sesión con estas credenciales.
+```
+
+### Iniciar Servidor
+
+```bash
+# Sin argumentos (comportamiento por defecto)
+cargo run
+
+# O explícitamente
+cargo run -- serve
+```
+
 ## Estado Actual
 
 **Version:** 0.1.0 (MVP en desarrollo)
@@ -154,21 +213,27 @@ TELEGRAM_BOT_TOKEN=your-telegram-bot-token-here
 ### ✅ Implementado
 
 - ✅ Servidor HTTP con Axum
-- ✅ Estructura modular (handlers, models, db, services)
+- ✅ Estructura modular (handlers, models, db, services, cli)
 - ✅ Sistema de logging con tracing
 - ✅ **Integración completa con PostgreSQL 18 + SQLx**
-  - Pool de conexiones configurado
+  - Pool de conexiones configurable vía env vars
   - Sistema de migraciones automáticas
   - Modelo User con roles (user/admin)
   - Queries CRUD type-safe para usuarios
   - Manejo de errores personalizado
+- ✅ **Sistema CLI con clap**
+  - Comando `create-admin` (interactivo o con argumentos)
+  - Validaciones de email, username y password
+  - Prevención de duplicados
+- ✅ **Hash de passwords con bcrypt**
+  - Factor de costo 12 (DEFAULT_COST)
+  - Integrado en CLI create-admin
 - ✅ Endpoints operacionales:
   - `GET /` - Información de la API
   - `GET /health` - Health check con verificación de BD
 
 ### 🔜 Próximos pasos
 
-- Implementar bcrypt para hash de passwords
 - Crear handlers de autenticación (register, login)
 - Implementar JWT authentication
 - Agregar endpoints REST para gestión de usuarios
