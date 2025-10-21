@@ -10,7 +10,7 @@ mod models;
 use handlers::{health_handler, root_handler, AppState};
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Initialize tracing for logging
     tracing_subscriber::registry()
         .with(
@@ -24,18 +24,13 @@ async fn main() {
     dotenvy::dotenv().ok();
 
     // Get database URL from environment
-    let database_url = std::env::var("DATABASE_URL")
-        .expect("DATABASE_URL must be set in .env file");
+    let database_url = std::env::var("DATABASE_URL")?;
 
     // Create database connection pool
-    let pool = db::create_pool(&database_url)
-        .await
-        .expect("Failed to create database pool");
+    let pool = db::create_pool(&database_url).await?;
 
     // Run migrations
-    db::run_migrations(&pool)
-        .await
-        .expect("Failed to run migrations");
+    db::run_migrations(&pool).await?;
 
     // Create application state
     let state = AppState { db: pool };
@@ -51,19 +46,16 @@ async fn main() {
     let host = std::env::var("HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
     let port = std::env::var("PORT")
         .unwrap_or_else(|_| "3000".to_string())
-        .parse::<u16>()
-        .expect("PORT must be a valid number");
+        .parse::<u16>()?;
 
     // Define the address to listen on
-    let addr = SocketAddr::from((
-        host.parse::<std::net::IpAddr>()
-            .expect("Invalid HOST address"),
-        port,
-    ));
+    let addr = SocketAddr::from((host.parse::<std::net::IpAddr>()?, port));
 
     tracing::info!("🚀 LumaStack backend listening on {}", addr);
 
     // Start the server
-    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    let listener = tokio::net::TcpListener::bind(addr).await?;
+    axum::serve(listener, app).await?;
+
+    Ok(())
 }

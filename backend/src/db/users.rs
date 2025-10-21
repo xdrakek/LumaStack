@@ -7,8 +7,8 @@ pub enum UserError {
     #[error("Usuario no encontrado")]
     NotFound,
 
-    #[error("El usuario ya existe: {0}")]
-    AlreadyExists(String),
+    #[error("El usuario ya existe")]
+    AlreadyExists,
 
     #[error("Error de base de datos: {0}")]
     Database(#[from] sqlx::Error),
@@ -48,9 +48,8 @@ pub async fn create_user(pool: &PgPool, user: CreateUser, password_hash: String)
     match result {
         Ok(user) => Ok(user),
         Err(sqlx::Error::Database(db_err)) if db_err.is_unique_violation() => {
-            Err(UserError::AlreadyExists(
-                db_err.message().to_string()
-            ))
+            // No exponemos detalles del schema en el mensaje de error
+            Err(UserError::AlreadyExists)
         }
         Err(e) => Err(UserError::Database(e)),
     }

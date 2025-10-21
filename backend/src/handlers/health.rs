@@ -1,4 +1,4 @@
-use axum::{extract::State, Json};
+use axum::{extract::State, http::StatusCode, Json};
 use chrono::Utc;
 use serde_json::{json, Value};
 use sqlx::PgPool;
@@ -62,28 +62,52 @@ pub async fn root_handler() -> Json<Value> {
 /// `GET /health`
 ///
 /// # Response
-/// JSON con el estado del servidor y la base de datos
+/// - **200 OK**: Servidor y base de datos funcionando correctamente
+/// - **503 Service Unavailable**: Base de datos no disponible
 ///
-/// # Example Response
+/// # Example Response (Success)
 /// ```json
 /// {
 ///   "status": "ok",
-///   "database": "healthy"
+///   "database": "healthy",
+///   "version": "0.1.0"
 /// }
 /// ```
-pub async fn health_handler(State(state): State<AppState>) -> Json<Value> {
+///
+/// # Example Response (Failure)
+/// ```json
+/// {
+///   "status": "error",
+///   "database": "unhealthy",
+///   "version": "0.1.0"
+/// }
+/// ```
+pub async fn health_handler(
+    State(state): State<AppState>,
+) -> Result<Json<Value>, (StatusCode, Json<Value>)> {
     // Intentar ejecutar una query simple para verificar la conexión
-    let db_status = sqlx::query("SELECT 1")
+    let db_healthy = sqlx::query("SELECT 1")
         .execute(&state.db)
         .await
-        .map(|_| "healthy")
-        .unwrap_or("unhealthy");
+        .is_ok();
 
-    Json(json!({
+    if !db_healthy {
+        // Retornar 503 Service Unavailable si la BD no está disponible
+        return Err((
+            StatusCode::SERVICE_UNAVAILABLE,
+            Json(json!({
+                "status": "error",
+                "database": "unhealthy",
+                "version": env!("CARGO_PKG_VERSION")
+            })),
+        ));
+    }
+
+    Ok(Json(json!({
         "status": "ok",
-        "database": db_status,
+        "database": "healthy",
         "version": env!("CARGO_PKG_VERSION")
-    }))
+    })))
 }
 
 #[cfg(test)]
